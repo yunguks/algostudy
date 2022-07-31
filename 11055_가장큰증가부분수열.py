@@ -23,6 +23,24 @@ import sys
 
 input = sys.stdin.readline
 
+n = int(input())
+# [나의 수, 최대합] 을 저장하여서 이전 수 중에서
+# 작은 것들 중 가장 큰값 찾아서 계산
+line = list(map(int,input().split()))
+output = [[line[0], line[0]]]
+
+for i in range(1,len(line)):
+    M = 0
+    for j in range(i):
+        if line[i] > output[j][0]:
+            if M < output[j][1]:
+                M = output[j][1]
+    output.append([line[i],M+line[i]])
+    # print(output)
+# map(max, input) 을 한다면 input에서 가장 큰값 들을 iterator로
+print(max(map(max,output)))
+'''
+시간초과, 모든 오름 수열을 저장하여서 가장 큰 것을 출력
 n=int(input())
 
 line = list(map(int,input().split()))
@@ -39,3 +57,4 @@ for i in output:
     if M < sum(i):
         M = sum(i)
 print(M)
+'''
