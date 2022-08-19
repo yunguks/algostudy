@@ -70,24 +70,23 @@ def check(numbers):
 
     return s
 
-def select(k,start,link):
+def select(k,start):
     global n
     global diff
-    #print(start,link)
-    if len(start) == n//2 and len(link)==n//2:
-        m = abs(check(start) -check(link))
+    #print(start)
+    if len(start) == n//2:
+        temp = []
+        for i in range(n):
+            if i not in start:
+                temp.append(i)
+        m = abs(check(start) -check(temp))
         if m < diff:
             diff = m
         return
     for i in range(k,n):
-        if len(start) < n//2:
-            start.append(i)
-            select(i+1,start,link)
-            start.pop()
-        if len(link) < n//2:
-            link.append(i)
-            select(i+1,start,link)
-            link.pop()
+        start.append(i)
+        select(i+1,start)
+        start.pop()
 
 input= sys.stdin.readline
 
@@ -101,5 +100,5 @@ for i in range(n):
 
 diff=100*n*n
 
-select(0,[],[])
+select(0,[])
 print(diff)
