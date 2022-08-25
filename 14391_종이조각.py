@@ -54,15 +54,47 @@ N,M=map(int,input().split())
 s=[]
 for _ in range(N):
     s.append(list(map(int,input().rstrip())))
-print(s)
 
-Map = [[0 for _ in range(M)] for _ in range(N)]
+def count(N,M,s):
+    result = 0
+    # bit 이동하였으므로 2^N*M, 최대 2^16, 
+    # 4x4의 맵에 가로와 세로를 만든다면 가로 0, 세로1 로 표시한다.
+    # 배열로 하면 계산이 많기 때문에 0001101 각각에 해당하는 자리를 배열로 보는 것이다.
+    # [[0,0],[0,1],[0,2],[1,0],[1,1] ... ] 일렬로 쭉 늘어 뜨려서 보는 것
+    for i in range(1<<N*M):
+        total = 0
+        # 가로의 합 
+        for r in range(N):
+            r_sum = 0
+            for c in range(M):
+                # 현재 보는 것이 어느 배열에 해당하는지
+                # 가로부터 [0,0] [0,1] [0,2] [0,3] 이렇게 되므로
+                check = M * r +c
+                # check만큼 이동한 해당 배열이 1이 라면 가로 더하기 x
+                if i &(1<<check) ==0:
+                    # 이전의 값에서 x10
+                    r_sum = r_sum*10 +s[r][c]
+                else:
+                    total+=r_sum
+                    r_sum=0
+            # 한줄 계산이 끝나면 그것을 전체에 더하기
+            total +=r_sum
 
-mask = []
-mask.append([1])
-mask.append([10,1])
-mask.append([100,10,1])
-mask.append([1000,100,10,1])
-mask.append()
-def count(Map,s):
+        # 세로 합, row를 돌아서 해당하는 column의합
+        for c in range(M):
+            c_sum =0
+            for r in range(N):
+                check = M *r +c
+
+                if i & (1<<check)!=0:
+                    c_sum = c_sum*10 + s[r][c]
+                else:
+                    total+=c_sum
+                    c_sum =0
+            total +=c_sum
+
+        result = max(result,total)
+    return result
+
+print(count(N,M,s))
 
