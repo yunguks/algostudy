@@ -53,7 +53,7 @@ NxM크기의 배열로 표현되는 미로가 있다.
 1000001
 1111111
 예제 출력 4 
-13
+13`
 '''
 import sys
 from collections import deque
