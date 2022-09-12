@@ -159,27 +159,47 @@
 2 2 1 0 0 0 0 0 1 1 2 2
 '''
 import sys
+from collections import deque
+#dfs 깊이 조정
+sys.setrecursionlimit(10000)
 
 def circle(i,stack,d):
     global S
     global visit
-    print(i,stack)
-    if d > 1:
-        if visit[i]==1:
-            while True:
-                k = stack.pop()
-                if k ==i:
-                    break
-                visit[k]=-1
-            return 0
-        visit[i]=1
+    # 한번 방문한 적 있으면서도 직전이 아닌 경우 순환역으로 생각
+    if -1<visit[i]<d-1:
+        stack.pop()
+        while True:
+            # 순환역을 0으로 바꿔주기
+            k = stack.pop()
+            visit[k]=0
+            if k ==i:
+                break
+        return 0
+    # 방문하면서 계속 추가
+    visit[i]=d
     
     for k in S[i]:
-        if visit[k]==0:
+        if visit[k]==-1 or visit[k]<d-1:
             stack.append(k)
             if circle(k,stack,d+1)==0:
                 return 0
             stack.pop()
+    return 
+
+def bfs():
+    global visit
+    global S
+    q = deque()
+    for i in range(N):
+        if visit[i]==0:
+            q.append(i)
+        while q:
+            k = q.popleft()
+            for x in S[k]:
+                if visit[x]==-1:
+                    visit[x]=visit[k]+1
+                    q.append(x)
 
     return 
 
@@ -190,9 +210,15 @@ for _ in range(N):
     S[a-1].append(b-1)
     S[b-1].append(a-1)
 
-visit = [0 for i in range(N)]
-circle(0,[0],0)
-print(visit)
+visit = [-1] * N
+# 순환 역 찾기
+circle(0,[0],1)
+# 순환역이 아닌 것은 모두 -1
+for i in range(N):
+    if visit[i]!=0:
+        visit[i]=-1
+bfs()
+print(*visit)
 
 
 
