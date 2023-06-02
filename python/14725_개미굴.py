@@ -101,7 +101,7 @@ if __name__=="__main__":
             if i not in temp.keys():
                 temp[i]={}
             temp = temp[i]
-    
+    print(tree)
     def print_dic(dic,depth):
         order = sorted(dic.keys())
         for o in order:
