@@ -35,9 +35,8 @@ count = [1]*10
 for _ in range(2,n+1):
     temp = count[:]
     for i in range(len(count)):
-        num = 0
-        for j in range(i,len(count)):
-            num += temp[j]%10007
-        count[i] = num
+        for j in range(i+1,len(count)):
+            temp[j] += count[i]%10007
+    count = temp[:]
 
 print(sum(count)%10007)
